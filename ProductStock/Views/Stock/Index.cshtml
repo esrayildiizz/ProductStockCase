@@ -7,59 +7,55 @@
 <table id="MaterialList" class="table table-bordered">
     <thead>
         <tr>
-            <th>Flour</th>
-            <th>Water</th>
-            <th>Salt</th>
-            <th>Yeast</th>
+            <th>Flour Packet Count</th>
+            <th>Water Packet Count</th>
+            <th>Salt Packet Count</th>
+            <th>Yeast Packet Count</th>
         </tr>
     </thead>
 </table>
 <br />
-
-
-<br />
 <table id="ProductList" class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Bread</th>
-            <th>BreadCount</th>
+            <th>Product Name</th>
+            <th>Product Stock Count</th>
         </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
 <br />
-<br />
-<button onclick="GetStock()" id="btn" style="margin-right: 20px;">Ekmek Yap</button>
+<button onclick="GetProduct()" id="btn" style="margin-right: 20px;">Ekmek Yap</button>
 <script>
-    function GetStock() {
+    function GetProduct() {
+        debugger;
         var t = $('#ProductList').DataTable({
-            columnDefs: [{
+            columnDefs: [{ // hata mesajını engelemek için
                 "defaultContent": "-",
                 "targets": "_all"
             }]
         });
-        t.destroy();
-        t.rows().clear().draw();
+        t.destroy(); // hata mesajını engelemek için
+        t.rows().clear().draw(); // t tablelının satırlarını temizle alt alta eklemesini engelemek için
         $.ajax({
-            url: '/Stock/ProductList',
+            url: '/Stock/ProductList', // controllerdaki metodunu çagırıyor
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                debugger;
-                $.each(data, function (index, data) {
-                    t.row.add([
+                debugger;//gelen datayı ön yüzde incele yaparak gelen datayı gördük bu şekilde isimlerin nasıl yazılıması gerektiğini gördük
+                $.each(data, function (index, data) { // freach işlemi yaparak productlist tablosunu dolduruyoruz
+                    t.row.add([ // satırlarını gezip çektiğimiz verileri kaydediyoruz
                         data.ProductName,
                         data.ProductStock
                     ]).draw(false);
                 });
             }
         })
-
     }
     $(document).ready(function () {
-        GetStock();
-        var t = $('#MaterialList').DataTable({
+        GetProduct();//ilk çagırma sebebimizde produck adedi ilk başta eklenmiyordu. proje yüklenirken ilk bu metodumuz listelensin
+        var t = $('#MaterialList').DataTable({ // sayfa yüklenirken material tablamuz yani stoklarımız yüklensin diye
             columnDefs: [{
                 "defaultContent": "-",
                 "targets": "_all"
@@ -80,10 +76,10 @@
                         data.Yeast
                     ]).draw(false);
                 });
-                debugger;
             }
         });
         $("#btn").click(function () {
+            debugger;
             var t = $('#MaterialList').DataTable({
                 columnDefs: [{
                     "defaultContent": "-",
@@ -97,6 +93,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
+                    GetProduct();
                     $.each(data, function (index, data) {
                         t.row.add([
                             data.Flour,
@@ -105,7 +102,6 @@
                             data.Yeast
                         ]).draw(false);
                     });
-                    GetStock();
                 }
             })
         })

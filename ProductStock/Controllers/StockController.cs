@@ -19,7 +19,7 @@ namespace ProductStock.Controllers
         public ActionResult StockListAdd()
         {
             var data = _rm.StockListAdd(); 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);//http get'de json işlemi yapıldığında JsonRequestBehavior işlemi yapılması gerekiyor yoksa proje hata veriyor. çünkü http get işlemi güvenli olmadığı için bilgilerimiz direk görülebilmektedir. son işlemini yapma sebebimizde datatype json olduğu için
         }
         [HttpGet]
         public ActionResult StockList()
