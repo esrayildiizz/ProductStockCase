@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Shared/_Layout.cshtml";
+}
+
+
+<table id="MaterialList" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Flour</th>
+            <th>Water</th>
+            <th>Salt</th>
+            <th>Yeast</th>
+        </tr>
+    </thead>
+</table>
+<button onclick="GetStock()" id="btn" style="margin-right: 20px;">Ekmek Yap</button>
+<div>
+
+</div>
+<br />
+<table id="ProductList" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Bread</th>
+            <th>BreadCount</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<script>
+    function GetStock() {
+        var t = $('#ProductList').DataTable({
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }]
+        });
+        t.destroy();
+        t.rows().clear().draw();
+        $.ajax({
+            url: '/Stock/ProductList',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                debugger;
+                $.each(data, function (index, data) {
+                    t.row.add([
+                        data.ProductName,
+                        data.ProductStock
+                    ]).draw(false);
+                });
+            }
+        })
+
+    }
+    $(document).ready(function () {
+        GetStock();
+        var t = $('#MaterialList').DataTable({
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }],
+        });
+        t.destroy();
+        t.rows().clear().draw();
+        $.ajax({
+            url: '/Stock/StockList',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (index, data) {
+                    t.row.add([
+                        data.Flour,
+                        data.Water,
+                        data.Salt,
+                        data.Yeast
+                    ]).draw(false);
+                });
+                debugger;
+            }
+        });
+        $("#btn").click(function () {
+            var t = $('#MaterialList').DataTable({
+                columnDefs: [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }]
+            });
+            t.destroy();
+            t.rows().clear().draw();
+            $.ajax({
+                url: '/Stock/StockListAdd',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (index, data) {
+                        t.row.add([
+                            data.Flour,
+                            data.Water,
+                            data.Salt,
+                            data.Yeast
+                        ]).draw(false);
+                    });
+                    GetStock();
+                }
+            })
+        })
+    });
+
+</script>
+
+
