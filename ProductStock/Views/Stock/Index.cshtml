@@ -2,31 +2,48 @@
     ViewBag.Title = "Index";
     Layout = "~/Shared/_Layout.cshtml";
 }
+<div class="table-success col-md-8"style="margin-left:180px;">
+    <h6>*Hammadde gramajları bir ekmek yapabilicek şekilde paketlenmiştir.</h6>
+</div>
+<br />
+
+<div class="table table-bordered border-dark col-md-8" style="margin-left:180px;">
+    <table id="MaterialList" class="table table-success table-striped" >
+        <thead>
+            <tr>
+                <th>Flour Packet Count</th>
+                <th>Water Packet Count</th>
+                <th>Salt Packet Count</th>
+                <th>Yeast Packet Count</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<br />
+<div class="table table-bordered border-dark col-md-8" style="margin-left:180px;">
+    <table id="ProductList" class="table table-success table-striped" >
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product Stock Count</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<br />
+
+<div  style="margin-left:180px;">
+    <button onclick="GetProduct()" id="btn" style="margin-block-start: 20px;" class=" btn btn-dark">Ekmek Yap</button>
+</div>
 
 
-<table id="MaterialList" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Flour Packet Count</th>
-            <th>Water Packet Count</th>
-            <th>Salt Packet Count</th>
-            <th>Yeast Packet Count</th>
-        </tr>
-    </thead>
-</table>
-<br />
-<table id="ProductList" class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Product Stock Count</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-<br />
-<button onclick="GetProduct()" id="btn" style="margin-right: 20px;">Ekmek Yap</button>
+<div style="margin-left:180px;">
+    <button onclick="GetProduct()" id="btn" style="margin-block-start: 20px;" class=" btn btn-dark">Stok Güncelle</button>
+</div>
+
+
 <script>
     function GetProduct() {
         debugger;
