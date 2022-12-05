@@ -12,6 +12,7 @@ namespace Business.Concrete
 {
     public class StockManager : IStockService
     { 
+        
         public ServiceResponse<Stock> StockListAdd()
         {
             ServiceResponse<Stock> responce = new ServiceResponse<Stock>();
