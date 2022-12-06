@@ -11,37 +11,45 @@ using System.Threading.Tasks;
 namespace Business.Concrete
 {
     public class StockManager : IStockService
-    { 
-        
+    {
         public ServiceResponse<Stock> StockListAdd()
         {
-            ServiceResponse<Stock> responce = new ServiceResponse<Stock>();
+            ServiceResponse<Stock> response = new ServiceResponse<Stock>();
             try
             {
                 EfProductDal product = new EfProductDal();
                 EfStockDal stock = new EfStockDal();
                 var tempStock = stock.Get();
-               
+
+                if (tempStock.Flour < 1 || tempStock.Salt<1 || tempStock.Water<1 || tempStock.Yeast<1)
+                {
+                    response.Error = "Stok adedi 1'den düşük olamaz.";
+                    response.Success = false;
+                    return response;
+                }
+
                 tempStock.Flour -= 1;
                 tempStock.Salt -= 1;
                 tempStock.Water -= 1;
                 tempStock.Yeast -= 1;
                 stock.Update(tempStock);
-                //BURAYA BAKILACAK UNUTMA!! AYNI ANDA HEM PRODUCT HEMDE STOCK RESPONSA NASIL EKLENİR
+              
                 var tempProduct = product.Get();
                 tempProduct.ProductStock += 1;
                 product.Update(tempProduct);
 
-                responce.Data = tempStock;
+                response.Data = tempStock;
+                response.Success = true;
+                response.Message = "Ekmek yapma işlemi başarılı";
+                return response;
 
             }
             catch (Exception ex)
             {
-                responce.Message = ex.Message.ToString();//Hata mesajı daha kısa haliyle
-                responce.Error = ex.StackTrace.ToString();//Hata detayı
-                responce.Success = false;
+                response.Error = ex.StackTrace.ToString();//Hata detayı
+                response.Success = false;
+                return response;
             }
-            return responce;
         }
         public ServiceResponse<Stock> StockList()
         {
@@ -49,33 +57,70 @@ namespace Business.Concrete
             try
             {
                 EfStockDal stock = new EfStockDal();
-                response.Data = stock.Get();
+                response.Data = stock.List().FirstOrDefault();
+                response.Message = "Stok listeleme başarılı";
+                response.Success = true;
 
             }
             catch (Exception ex)
             {
-                response.Message = ex.Message.ToString();//Hata mesajı daha kısa haliyle
                 response.Error = ex.StackTrace.ToString();//Hata detayı
                 response.Success = false;
             }
             return response;
         }
+
         public ServiceResponse<Product> ProductList()
-        { 
+        {
             ServiceResponse<Product> response = new ServiceResponse<Product>();
             try
             {
                 EfProductDal product = new EfProductDal();
-                response.Data = product.Get();
+                response.Data = product.List().FirstOrDefault();
+                response.Message = "Product listeleme başarılı";
+                response.Success = true;
 
             }
             catch (Exception ex)
             {
-                response.Message = ex.Message.ToString();//Hata mesajı daha kısa haliyle
                 response.Error = ex.StackTrace.ToString();//Hata detayı
                 response.Success = false;
             }
             return response;
+        }
+
+
+        public ServiceResponse<Stock> StockAdd(Stock stock)
+        {
+            ServiceResponse<Stock> response = new ServiceResponse<Stock>();
+            try
+            {
+                EfStockDal stockDal = new EfStockDal();
+                if (stock.Flour < 0 || stock.Salt < 0 || stock.Water < 0 || stock.Yeast < 0)
+                {
+                    response.Error = "Stok adedi 0'dan düşük olamaz.";
+                    response.Success = false;
+                    return response;
+                }
+
+                var tempStock=stockDal.Get();
+                tempStock.Flour += stock.Flour;
+                tempStock.Water += stock.Water;
+                tempStock.Salt += stock.Salt;
+                tempStock.Yeast += stock.Yeast;
+                stockDal.Update(tempStock);
+
+                response.Message = "Stok ekleme başarılı";
+                response.Success = true;
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Error = ex.StackTrace.ToString();//Hata detayı
+                response.Success = false;
+                return response;
+            }
         }
     }
 }

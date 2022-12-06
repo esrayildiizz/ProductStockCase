@@ -15,26 +15,34 @@ namespace ProductStock.Controllers
         public ActionResult Index()
         {
             return View();
-        }
+        } 
+
         [HttpGet]
-        public ActionResult StockListAdd()
+        public ActionResult StockListAdd() //Row lara veri eksensin diye oluşturdum.
         {
-            var data = _rm.StockListAdd(); 
+            var data = _rm.StockListAdd();
             return Json(data, JsonRequestBehavior.AllowGet);//http get'de json işlemi yapıldığında JsonRequestBehavior işlemi yapılması gerekiyor yoksa proje hata veriyor. çünkü http get işlemi güvenli olmadığı için bilgilerimiz direk görülebilmektedir. son işlemini yapma sebebimizde datatype json olduğu için
         }
 
         [HttpGet]
-        public ActionResult StockList()
+        public ActionResult StockList() //stok  listelensin
         {
-            var data = _rm.StockList(); 
+            var data = _rm.StockList();
+            return Json(data, JsonRequestBehavior.AllowGet);
+        } 
+
+        [HttpGet]
+        public ActionResult ProductList() //ürün listelensin
+        {
+            var data = _rm.ProductList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult ProductList()
+        [HttpPost]
+        public ActionResult StockAdd(Stock stock) //Popup ekranı için oluşturdum.
         {
-            var data = _rm.ProductList();
-            return Json(data, JsonRequestBehavior.AllowGet); 
+            var data = _rm.StockAdd(stock);
+            return RedirectToAction("Index");
         }
     }
 }

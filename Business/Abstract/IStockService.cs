@@ -9,8 +9,10 @@ namespace Business.Abstract
 {
     public interface IStockService
     {
-        ServiceResponse<Stock> StockListAdd();
+
+        ServiceResponse<Stock> StockListAdd(); //row içleri dolsun-eklesin
         ServiceResponse<Stock> StockList();
+        ServiceResponse<Stock> StockAdd(Stock stock); //Popup da ekleme yapma için oluşturdum.
         ServiceResponse<Product> ProductList();
 
     }
